@@ -13,6 +13,7 @@ class Pet {
   dataNascimento: Date;
   @Column()
   adotado: boolean;
+
 }
 
 export default Pet;
