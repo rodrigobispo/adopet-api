@@ -3,10 +3,6 @@ import EnumEspecie from "../enum/EnumEspecie";
 import PetRepository from "../repositories/PetRepository";
 import Pet from "../entities/Pet";
 
-let id = 0;
-function geraId() {
-  return id++;
-}
 export default class PetController {
 
   constructor(private repository: PetRepository) {}
@@ -18,12 +14,7 @@ export default class PetController {
       return response.status(400).json({ erro: 'Espécie inválida.' });
     }
 
-    const novoPet = new Pet();
-    novoPet.id = geraId();
-    novoPet.nome = nome;
-    novoPet.especie = especie;
-    novoPet.adotado = adotado;
-    novoPet.dataNascimento = dataNascimento;
+    const novoPet = new Pet(nome, especie, dataNascimento, adotado);
 
     this.repository.criaPet(novoPet);
     return response.status(201).json(novoPet);
@@ -38,17 +29,17 @@ export default class PetController {
     const { id } = req.params;
     const { success, message } = await this.repository.atualizaPet(Number(id), req.body as Pet);
 
-    this.emiteMensagem(success, message, res);
+    this.emiteMensagem(res, success, message);
   }
 
   async deletaPet(req: Request, res: Response) {
     const { id } = req.params;
     const { success, message } = await this.repository.deletaPet(Number(id));
 
-    this.emiteMensagem(success, message, res);
+    this.emiteMensagem(res, success, message);
   }
 
-  emiteMensagem(success: boolean, message: string, res: Response) {
+  emiteMensagem(res: Response, success: boolean, message?: string) {
     if (!success) {
       return res.status(404).json({ message });
     }
