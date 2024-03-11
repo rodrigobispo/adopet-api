@@ -1,8 +1,13 @@
 import {
   Column,
   Entity,
+  JoinColumn,
+  OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
+import Endereco from "./Endereco";
+import Pet from "./Pet";
 
 @Entity()
 class Adotante {
@@ -16,15 +21,20 @@ class Adotante {
   celular: string;
   @Column({ nullable: true })
   foto?: string;
-  @Column({ nullable: true })
-  endereco?: string;
+
+  @OneToOne(() => Endereco, { nullable: true, cascade: true, eager: true })
+  @JoinColumn()
+  endereco?: Endereco;
+
+  @OneToMany(() => Pet, (pet) => pet.adotante)
+  pets!: Pet;
 
   constructor(
     nome: string,
     senha: string,
     celular: string,
     foto?: string,
-    endereco?: string
+    endereco?: Endereco
   ) {
     this.nome = nome;
     this.senha = senha;
