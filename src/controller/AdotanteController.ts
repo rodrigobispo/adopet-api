@@ -23,4 +23,37 @@ export default class AdotanteController {
       return res.status(500).json({ error: 'Erro ao criar o adotante' });
     }
   }
+
+  async atualizaAdotante(req: Request, res: Response) {
+    const { id } = req.params;
+    const { success, message } = await this.repository.atualizaAdotante(
+      Number(id),
+      req.body as Adotante
+    );
+
+    if (!success) {
+      return res.status(404).json({ message });
+    }
+
+    return res.status(201).json({ message });
+  }
+
+  async listaAdotantes(req: Request, res: Response) {
+    const listaDeAdotantes = await this.repository.listaAdotantes();
+    return res.json(listaDeAdotantes);
+  }
+
+  async deletaAdotante(req: Request, res: Response) {
+    const { id } = req.params;
+
+    const { success, message } = await this.repository.deletaAdotante(
+      Number(id)
+    );
+
+    if (!success) {
+      return res.status(404).json({ message });
+    }
+    return res.status(201).json({ message });
+  }
+
 }
