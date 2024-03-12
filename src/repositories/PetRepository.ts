@@ -1,6 +1,7 @@
 import { Repository } from "typeorm";
 import Pet from "../entities/Pet";
 import Adotante from "../entities/Adotante";
+import EnumPorte from "../enum/EnumPorte";
 
 class PetRepository {
   private petRepository: Repository<Pet>;
@@ -80,6 +81,11 @@ class PetRepository {
     pet.adotado = true;
     await this.petRepository.save(pet);
     return { success: true };
+  }
+
+  async buscaPeloPorte(porte: EnumPorte): Promise<Pet[]> {
+    const pets = await this.petRepository.find({ where: { porte } });
+    return pets;
   }
 }
 
