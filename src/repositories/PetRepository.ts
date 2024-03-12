@@ -87,6 +87,13 @@ class PetRepository {
     const pets = await this.petRepository.find({ where: { porte } });
     return pets;
   }
+
+  async buscaPorCampoGenerico<Tipo extends keyof Pet>(
+    campo: Tipo, valor: Pet[Tipo]
+  ): Promise<Pet[]> {
+    const pets = await this.petRepository.find({ where: {[campo]: valor} });
+    return pets;
+  }
 }
 
 export default PetRepository;

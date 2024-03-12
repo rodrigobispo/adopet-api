@@ -70,4 +70,13 @@ export default class PetController {
     }
     return res.status(200).json(listaDePets);
   }
+
+  async buscaPetPorCampoGenerico(req: Request, res: Response) {
+    const { campo, valor } = req.query;
+    const listaDePets = await this.petRepository.buscaPorCampoGenerico(
+      campo as keyof Pet,
+      valor as string
+    );
+    return res.status(200).json(listaDePets);
+  }
 }
