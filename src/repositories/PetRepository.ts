@@ -12,8 +12,8 @@ class PetRepository {
     this.adotanteRepository = adotanteRepository;
   }
 
-  criaPet(pet: Pet): void {
-    this.petRepository.save(pet);
+  async criaPet(pet: Pet): Promise<Pet> {
+    return this.petRepository.save(pet);
   }
 
   async listaPet(): Promise<Pet[]> {

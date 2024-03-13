@@ -2,11 +2,19 @@ import { Request, Response } from "express";
 import Adotante from "../entities/Adotante";
 import AdotanteRepository from "../repositories/AdotanteRepository";
 import Endereco from "../entities/Endereco";
+import {
+  TipoRequestBodyAdotante,
+  TipoRequestParamsAdotante,
+  TipoResponseBodyAdotante
+} from "../tipos/tiposAdotante";
 
 export default class AdotanteController {
   constructor(private repository: AdotanteRepository) {}
 
-  async criaAdotante(req: Request, res: Response) {
+  async criaAdotante(
+    req: Request<{}, TipoRequestBodyAdotante, {}>,
+    res: Response<TipoResponseBodyAdotante>
+  ) {
     try {
       const { nome, celular, endereco, foto, senha } = <Adotante>req.body;
 
@@ -19,13 +27,16 @@ export default class AdotanteController {
       );
 
       await this.repository.criaAdotante(novoAdotante);
-      return res.status(201).json(novoAdotante);
+      return res.status(201).json({ data: { id: novoAdotante.id, nome, celular } });
     } catch (error) {
       return res.status(500).json({ error: 'Erro ao criar o adotante' });
     }
   }
 
-  async atualizaAdotante(req: Request, res: Response) {
+  async atualizaAdotante(
+    req: Request<TipoRequestParamsAdotante, TipoRequestBodyAdotante, {}>,
+    res: Response<TipoResponseBodyAdotante>
+    ) {
     const { id } = req.params;
     const { success, message } = await this.repository.atualizaAdotante(
       Number(id),
@@ -33,10 +44,10 @@ export default class AdotanteController {
     );
 
     if (!success) {
-      return res.status(404).json({ message });
+      return res.status(404).json({ error: message });
     }
 
-    return res.status(201).json({ message });
+    return res.status(201).json({ error: message });
   }
 
   async listaAdotantes(req: Request, res: Response) {
@@ -44,7 +55,10 @@ export default class AdotanteController {
     return res.json(listaDeAdotantes);
   }
 
-  async deletaAdotante(req: Request, res: Response) {
+  async deletaAdotante(
+    req: Request<TipoRequestParamsAdotante, TipoRequestBodyAdotante, {}>,
+    res: Response<TipoResponseBodyAdotante>
+  ) {
     const { id } = req.params;
 
     const { success, message } = await this.repository.deletaAdotante(
@@ -52,12 +66,15 @@ export default class AdotanteController {
     );
 
     if (!success) {
-      return res.status(404).json({ message });
+      return res.status(404).json({ error: message });
     }
-    return res.status(201).json({ message });
+    return res.status(201).json({ error: message });
   }
 
-  async atualizaEnderecoAdotante(req: Request, res: Response) {
+  async atualizaEnderecoAdotante(
+    req: Request<TipoRequestParamsAdotante, TipoRequestBodyAdotante, {}>,
+    res: Response<TipoResponseBodyAdotante>
+  ) {
     const { id } = req.params;
 
     const { success, message } = await this.repository.atualizaEnderecoAdotante(
@@ -66,8 +83,8 @@ export default class AdotanteController {
     );
 
     if (!success) {
-      return res.status(404).json({ message });
+      return res.status(404).json({ error: message });
     }
-    return res.status(201).json({ message });
+    return res.status(201).json({ error: message });
   }
 }

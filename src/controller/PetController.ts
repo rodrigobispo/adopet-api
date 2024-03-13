@@ -3,30 +3,45 @@ import EnumEspecie from "../enum/EnumEspecie";
 import PetRepository from "../repositories/PetRepository";
 import Pet from "../entities/Pet";
 import EnumPorte from "../enum/EnumPorte";
+import { TipoRequestBodyPet, TipoRequestParamsPet, TipoResponseBodyPet } from "../tipos/tiposPet";
 
 export default class PetController {
 
   constructor(private petRepository: PetRepository) {}
 
-  criaPet(request: Request, response: Response) {
-    const {nome, especie, adotado, dataNascimento, porte} = <Pet>request.body;
+  async criaPet(
+    req: Request<TipoRequestParamsPet, TipoRequestBodyPet, {}>,
+    res: Response<TipoResponseBodyPet>
+  ) {
+    const {nome, especie, adotado, dataNascimento, porte} = <Pet>req.body;
 
     if (!Object.values(EnumEspecie).includes(especie)) {
-      return response.status(400).json({ erro: 'Espécie inválida.' });
+      return res.status(400).json({ message: 'Espécie inválida.' });
     }
     if (porte && !(porte in EnumPorte)) {
-      return response.status(400).json({ erro: 'Porte de pet inválido.' });
+      return res.status(400).json({ message: 'Porte de pet inválido.' });
     }
 
     const novoPet = new Pet(nome, especie, dataNascimento, adotado, porte);
 
-    this.petRepository.criaPet(novoPet);
-    return response.status(201).json(novoPet);
+    const petCriado = await this.petRepository.criaPet(novoPet);
+    return res.status(201).json({ data: { id: petCriado.id, nome, especie, porte } });
   }
 
-  async listaPets(req: Request, res: Response) {
+  async listaPets(
+    req: Request<TipoRequestParamsPet, TipoRequestBodyPet, {}>,
+    res: Response<TipoResponseBodyPet>
+  ) {
     const listaDePets = await this.petRepository.listaPet();
-    return res.status(200).json(listaDePets);
+    const data = listaDePets.map((pet) => {
+      return {
+        id: pet.id,
+        nome: pet.nome,
+        especie: pet.especie,
+        porte: pet.porte
+      }
+    });
+    return res.status(200).json({ data });
   }
 
   async atualizaPet(req: Request, res: Response) {
