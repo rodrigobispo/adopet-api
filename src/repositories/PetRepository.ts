@@ -20,7 +20,8 @@ class PetRepository {
     return this.petRepository.find();
   }
 
-  async atualizaPet(id: number, pet: Pet): Promise<{ success: boolean; message?: string }> {
+  async atualizaPet(id: number, pet: Pet)
+    : Promise<{ success: boolean; message?: string }> {
     try {
       const petToUpdate = await this.petRepository.findOneBy({ id: id });
       if (!petToUpdate) {
