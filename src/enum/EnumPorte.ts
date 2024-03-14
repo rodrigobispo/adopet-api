@@ -1,7 +1,7 @@
 enum EnumPorte {
-  PEQUENO = 'pequeno',
-  MEDIO = 'medio',
-  GRANDE = 'grande'
+  pequeno = 'pequeno',
+  medio = 'medio',
+  grande = 'grande'
 }
 
 export default EnumPorte;

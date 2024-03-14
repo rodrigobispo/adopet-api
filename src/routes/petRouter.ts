@@ -2,6 +2,7 @@ import express from 'express';
 import PetController from '../controller/PetController';
 import PetRepository from '../repositories/PetRepository';
 import { AppDataSource } from '../db/data-source';
+import { middlewareValidadorBodyPet } from '../middleware/validators/petRequestBody';
 
 const router = express.Router();
 
@@ -11,7 +12,7 @@ const petRepository = new PetRepository(
 );
 const petController = new PetController(petRepository);
 
-router.post("/", (req, res) => petController.criaPet(req, res))
+router.post("/", middlewareValidadorBodyPet, (req, res) => petController.criaPet(req, res))
   .put("/:id", (req, res) => petController.atualizaPet(req, res))
   .delete("/:id", (req, res) => petController.deletaPet(req, res))
   .get("/", (req, res) => petController.listaPets(req, res))
