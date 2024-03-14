@@ -25,7 +25,7 @@ export default class AdotanteController {
       endereco
     );
     await this.repository.criaAdotante(novoAdotante);
-    return res.status(201).json({ data: { id: novoAdotante.id, nome, celular } });
+    return res.status(201).json({ data: { id: novoAdotante.id, nome, celular, endereco } });
   }
 
   async atualizaAdotante(
@@ -47,7 +47,16 @@ export default class AdotanteController {
 
   async listaAdotantes(req: Request, res: Response) {
     const listaDeAdotantes = await this.repository.listaAdotantes();
-    return res.json(listaDeAdotantes);
+    const list = listaDeAdotantes.map((adotante) => {
+      return {
+        id: adotante.id,
+        nome: adotante.nome,
+        celular: adotante.celular,
+        endereco: adotante.endereco !== null ? adotante.endereco : undefined,
+        foto: adotante.foto !== null ? adotante.foto : undefined,
+      }
+    })
+    return res.json({ list });
   }
 
   async deletaAdotante(
@@ -67,14 +76,14 @@ export default class AdotanteController {
   }
 
   async atualizaEnderecoAdotante(
-    req: Request<TipoRequestParamsAdotante, TipoRequestBodyAdotante, {}>,
+    req: Request<TipoRequestParamsAdotante, {}, Endereco>,
     res: Response<TipoResponseBodyAdotante>
   ) {
     const { id } = req.params;
 
     const { success, message } = await this.repository.atualizaEnderecoAdotante(
       Number(id),
-      req.body as Endereco
+      req.body
     );
 
     if (!success) {
