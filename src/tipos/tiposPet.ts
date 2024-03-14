@@ -3,10 +3,10 @@ import Pet from "../entities/Pet";
 type TipoRequestBodyPet = Omit<Pet, "id">;
 type TipoRequestParamsPet = { id?: string };
 type TipoResponseBodyPet = {
-  data?:
+  dados?:
     | Pick<Pet, "id" | "nome" | "porte" | "especie">
     | Pick<Pet, "id" | "nome" | "porte" | "especie">[],
-  message?: unknown
+  mensagens?: unknown
 };
 
 export {

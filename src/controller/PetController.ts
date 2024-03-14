@@ -16,16 +16,16 @@ export default class PetController {
     const {nome, especie, adotado, dataNascimento, porte} = <Pet>req.body;
 
     if (!Object.values(EnumEspecie).includes(especie)) {
-      return res.status(400).json({ message: 'Espécie inválida.' });
+      return res.status(400).json({ mensagens: 'Espécie inválida.' });
     }
     if (porte && !(porte in EnumPorte)) {
-      return res.status(400).json({ message: 'Porte de pet inválido.' });
+      return res.status(400).json({ mensagens: 'Porte de pet inválido.' });
     }
 
     const novoPet = new Pet(nome, especie, dataNascimento, adotado, porte);
 
     const petCriado = await this.petRepository.criaPet(novoPet);
-    return res.status(201).json({ data: { id: petCriado.id, nome, especie, porte } });
+    return res.status(201).json({ dados: { id: petCriado.id, nome, especie, porte } });
   }
 
   async listaPets(
@@ -41,7 +41,7 @@ export default class PetController {
         porte: pet.porte
       }
     });
-    return res.status(200).json({ data });
+    return res.status(200).json({ dados: data });
   }
 
   async atualizaPet(req: Request, res: Response) {
