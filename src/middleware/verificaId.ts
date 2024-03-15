@@ -13,6 +13,8 @@ export const verificaIdMiddleware = (
         throw new RequisicaoRuim(`O parâmetro ${param} deve ser um número inteiro.`);
       }
     }
+    return next();
+
   } catch (error) {
     const exception = error as RequisicaoRuim;
     return res.status(exception.statusCode).json({ error: exception.message });

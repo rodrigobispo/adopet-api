@@ -13,7 +13,7 @@ const adotanteController = new AdotanteController(adotanteRepository);
 
 router.post("/", middlewareValidadorBodyAdotante, (req, res) => adotanteController.criaAdotante(req, res));
 router.get("/", (req, res) => adotanteController.listaAdotantes(req, res));
-router.put("/:id", verificaIdMiddleware, (req, res) => adotanteController.atualizaAdotante(req, res));
+router.put("/:id", verificaIdMiddleware, middlewareValidadorBodyAdotante, (req, res) => adotanteController.atualizaAdotante(req, res));
 router.delete("/:id", verificaIdMiddleware, (req, res) => adotanteController.deletaAdotante(req, res));
 router.patch("/:id", verificaIdMiddleware, middlewareValidadorBodyEndereco, (req, res) => adotanteController.atualizaEnderecoAdotante(req, res));
 

@@ -11,7 +11,7 @@ export default class Abrigo {
   nome: string;
   @Column({ unique: true })
   email: string;
-  @Column()
+  @Column({ unique: true })
   celular: string;
   @Column()
   senha: string;
