@@ -16,17 +16,22 @@ export default class AdotanteController {
     req: Request<{}, TipoRequestBodyAdotante, {}>,
     res: Response<TipoResponseBodyAdotante>
   ) {
-    const { nome, celular, endereco, foto, senha } = <Adotante>req.body;
+    try {
+      const { nome, celular, endereco, foto, senha } = <Adotante>req.body;
 
-    const novoAdotante = new Adotante(
-      nome,
-      senha,
-      celular,
-      foto,
-      endereco
-    );
-    await this.repository.criaAdotante(novoAdotante);
-    return res.status(201).json({ dados: { id: novoAdotante.id, nome, celular, endereco } });
+      const novoAdotante = new Adotante(
+        nome,
+        senha,
+        celular,
+        foto,
+        endereco
+      );
+      await this.repository.criaAdotante(novoAdotante);
+      return res.status(201).json({ dados: { id: novoAdotante.id, nome, celular, endereco } });
+    } catch (error) {
+      const exception = error as NaoEncontrado | RequisicaoRuim;
+      return res.status(exception.statusCode).json({ erros: exception.message });
+    }
   }
 
   async atualizaAdotante(

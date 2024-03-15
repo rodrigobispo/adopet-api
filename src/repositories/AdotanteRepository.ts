@@ -1,12 +1,19 @@
 import { Repository } from "typeorm";
 import Adotante from "../entities/Adotante";
 import Endereco from "../entities/Endereco";
-import { NaoEncontrado } from "../utils/manipulacaoDeErros";
+import { NaoEncontrado, RequisicaoRuim } from "../utils/manipulacaoDeErros";
 
 export default class AdotanteRepository {
   constructor(private repository: Repository<Adotante>) {}
 
+  private async verificaCelularAdotante(celular: string) {
+    return await this.repository.findOne({ where: { celular } });
+  }
+
   async criaAdotante(adotante: Adotante): Promise<void> {
+    if (await this.verificaCelularAdotante(adotante.celular)) {
+      throw new RequisicaoRuim("Celular já cadastrado");
+    }
     await this.repository.save(adotante);
   }
 
