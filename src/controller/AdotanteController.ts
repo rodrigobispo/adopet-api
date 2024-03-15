@@ -37,7 +37,7 @@ export default class AdotanteController {
   async atualizaAdotante(
     req: Request<TipoRequestParamsAdotante, TipoRequestBodyAdotante, {}>,
     res: Response<TipoResponseBodyAdotante>
-    ) {
+  ) {
     try {
       const { id } = req.params;
       const { message } = await this.repository.atualizaAdotante(

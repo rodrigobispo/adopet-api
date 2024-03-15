@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import * as yup from "yup";
 import { TipoRequestBodyAdotante } from "../../tipos/tiposAdotante";
 import { pt } from "yup-locale-pt";
+import tratarErroValidacaoYup from "../../utils/tratarValidacaoYup";
 
 const numCelularRegexExp = /^(\(?[0-9]{2}\)?)? ?([0-9]{4,5})-?([0-9]{4})$/gm;
 const strictPasswordValidatorRegexExp = /^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[^\w\d\s:])([^\s]){8,16}$/gm;
@@ -16,20 +17,7 @@ const esquemaBodyAdotante: yup.ObjectSchema<Omit<TipoRequestBodyAdotante, "ender
 });
 
 const middlewareValidadorBodyAdotante = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    await esquemaBodyAdotante.validate(req.body, { abortEarly: false });
-    return next();
-  } catch (error) {
-    const yupErrors = error as yup.ValidationError;
-
-    const validationErrors: Record<string, string> = {};
-
-    yupErrors.inner.forEach((error) => {
-      if (error.path) validationErrors[error.path] = error.message;
-    });
-
-    return res.status(500).json({ error: validationErrors });
-  }
+  tratarErroValidacaoYup(esquemaBodyAdotante, req, res, next);
 }
 
-export { middlewareValidadorBodyAdotante }
+export { middlewareValidadorBodyAdotante };
