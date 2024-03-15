@@ -1,11 +1,7 @@
-import crypto from "crypto";
+import { createHash } from "crypto";
 
 const criaSenhaCriptografada = (senha: string) => {
-  const salt = crypto.randomBytes(16).toString("hex");
-  const hash = crypto.createHmac("sha256", salt);
-
-  hash.update(senha);
-  return hash.digest("hex");
+  return createHash('sha256').update(senha).digest('hex');
 }
 
 export default criaSenhaCriptografada;
