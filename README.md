@@ -34,6 +34,11 @@ Para os demais métodos (post, put, delete, patch) REST, modificar tais métodos
 
 Na pasta `adopet-api/src/utils` pode ser usado o comando `npx ts-node testeCriaHashComSalt.ts` para execução do código de teste que utiliza **criptografia com salt** (modo mais seguro).
 
+### Geração de imagem Docker
+
+Na pasta onde há o arquivo Dockerfile, gerar a partir do comando `docker build -t <nome-usuario>/app-adopet:1.0 .`
+Em seguida executar `docker run -p 3000:3000 <nome-usuario>/app-adopet:1.0`
+
 ## Referência
 Estudo praticado a apartir do treinamento da Alura: *"TypeScript: desenvolvendo validações e tratando erros"*.
 Instrutor: *Emerson Laranja*.
